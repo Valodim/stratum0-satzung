@@ -1,0 +1,48 @@
+%% stratum0doc.sty
+%%
+\NeedsTeXFormat{LaTeX2e}[1995/12/01]
+
+\ProvidesPackage{stratum0doc}
+
+%% Package options
+\makeatletter
+  \DeclareOption{transcript}{\def\@sndsectionmark{TOP}}
+  \DeclareOption{legal}{\def\@sndsectionmark{§}}
+  \ExecuteOptions{transcript}
+  \ProcessOptions\relax
+\makeatother
+
+%% fancyhdr setup
+\newcommand{\myfancysetup}[2]{%
+  \pagestyle{fancy}
+  \fancyhf{}
+  \fancyhead[L]{\sc #1}%
+  \fancyhead[R]{\sc #2}%
+  \fancyfoot[C]{Seite \thepage\ von \pageref{LastPage}}
+  \fancypagestyle{plain}{% for first page
+    \renewcommand{\headrulewidth}{0pt}%
+    \fancyhf{}%
+    \fancyfoot[C]{Seite \thepage\ von \pageref{LastPage}}%
+  }
+}
+
+%% list bullets, section prefix
+\makeatletter
+\renewcommand{\labelenumi}{(\arabic{enumi})}
+\renewcommand{\labelitemi}{--}
+\renewcommand{\thesection}{%
+    \@sndsectionmark\ \@arabic\c@section
+}
+\makeatother
+
+\RequirePackage{fancyhdr}
+\RequirePackage{lastpage}
+
+%% bootstrapping
+\makeatletter
+\AtBeginDocument{%
+  \let\mytitle\@title%
+  \let\mydate\@date%
+  \myfancysetup{\mytitle}{\mydate}%
+}
+\makeatother
